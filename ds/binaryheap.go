@@ -65,7 +65,9 @@ func (bh *BinaryHeap) Remove() (interface{}, error) {
 	item := bh.heap[0]
 	bh.insertionPoint = bh.insertionPoint - 1
 	bh.heap[0] = bh.heap[bh.insertionPoint]
-	bh.percolateDown()
+	if bh.insertionPoint > 1 {
+		bh.percolateDown()
+	}
 	return item, nil
 }
 
@@ -73,7 +75,7 @@ func (bh *BinaryHeap) percolateDown() {
 	currPtr := 0
 	for {
 		child := (currPtr * 2) + 1
-		if child >= bh.size || bh.comparer(bh.heap[currPtr], bh.heap[child]) >= 0 {
+		if child >= bh.insertionPoint || bh.comparer(bh.heap[currPtr], bh.heap[child]) >= 0 {
 			break
 		}
 		bh.swapItems(currPtr, child)
@@ -85,4 +87,8 @@ func (bh *BinaryHeap) swapItems(a int, b int) {
 	tmp := bh.heap[a]
 	bh.heap[a] = bh.heap[b]
 	bh.heap[b] = tmp
+}
+
+func (bh *BinaryHeap) String() string {
+	return fmt.Sprintf("{ip: %d, heap: %#v}", bh.insertionPoint, bh.heap)
 }

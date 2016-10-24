@@ -2,26 +2,37 @@ package path
 
 import "github.com/charithe/algorithms/ds"
 
+type weightedCoord struct {
+	coord  *Coordinate
+	weight int
+}
+
+func weightedCoordComparer(a interface{}, b interface{}) int {
+	ac := a.(*weightedCoord)
+	bc := b.(*weightedCoord)
+	return bc.weight - ac.weight
+}
+
 func Djikstra(m *Map, from *Coordinate, to *Coordinate) Path {
 	var path []*Coordinate
 	cameFrom := make(map[Coordinate]*Coordinate)
-	frontier := ds.NewCircularQueue(m.size * m.size)
+	frontier := ds.NewBinaryHeap(weightedCoordComparer, m.size*m.size)
 	costs := make(map[Coordinate]int)
 
-	frontier.Enqueue(from)
+	frontier.Insert(&weightedCoord{coord: from, weight: 0})
 	cameFrom[*from] = from
 	costs[*from] = 0
 
 	for {
-		temp, err := frontier.Dequeue()
+		temp, err := frontier.Remove()
 		if err != nil {
 			break
 		}
 
-		coord := temp.(*Coordinate)
+		wc := temp.(*weightedCoord)
 
-		if (*coord) == (*to) {
-			pathPoint := coord
+		if (*wc.coord) == (*to) {
+			pathPoint := wc.coord
 			for {
 				path = append(path, pathPoint)
 				if (*pathPoint) == (*from) {
@@ -32,17 +43,18 @@ func Djikstra(m *Map, from *Coordinate, to *Coordinate) Path {
 			break
 		}
 
-		neighbours := m.GetNeighbours(coord)
-		costSoFar := costs[*coord]
+		neighbours := m.GetNeighbours(wc.coord)
 		for _, neighbour := range neighbours {
-			// Need Priority queue
-			if _, ok := cameFrom[*neighbour]; !ok && m.IsFree(neighbour) {
-				frontier.Enqueue(neighbour)
-				cameFrom[*neighbour] = coord
+			if m.IsFree(neighbour) {
+				newCost := costs[*wc.coord] + 1
+				if c, ok := costs[*neighbour]; !ok || newCost < c {
+					costs[*neighbour] = newCost
+					frontier.Insert(&weightedCoord{coord: neighbour, weight: newCost})
+					cameFrom[*neighbour] = wc.coord
+				}
 			}
 		}
 	}
-
 	return path
 
 }
