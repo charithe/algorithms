@@ -2,17 +2,6 @@ package path
 
 import "github.com/charithe/algorithms/ds"
 
-type weightedCoord struct {
-	coord  *Coordinate
-	weight int
-}
-
-func weightedCoordComparer(a interface{}, b interface{}) int {
-	ac := a.(*weightedCoord)
-	bc := b.(*weightedCoord)
-	return bc.weight - ac.weight
-}
-
 func Djikstra(m *Map, from *Coordinate, to *Coordinate) Path {
 	var path []*Coordinate
 	cameFrom := make(map[Coordinate]*Coordinate)

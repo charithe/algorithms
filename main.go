@@ -7,10 +7,16 @@ import (
 )
 
 func main() {
+	fmt.Println("Breadth-first")
 	m := path.NewMap(10, path.NewObstacle(2, 2, 8, 2), path.NewObstacle(1, 8, 8, 8), path.NewObstacle(8, 2, 8, 8))
 	pb := path.BreadthFirst(m, path.NewCoord(4, 7), path.NewCoord(9, 5))
 	m.DrawPath(pb)
 	fmt.Println()
+	fmt.Println("Greedy breadth-first")
+	pg := path.GreedyBreadthFirst(m, path.NewCoord(4, 7), path.NewCoord(9, 5))
+	m.DrawPath(pg)
+	fmt.Println()
+	fmt.Println("Djikstra")
 	pd := path.Djikstra(m, path.NewCoord(4, 7), path.NewCoord(9, 5))
 	m.DrawPath(pd)
 	/*

@@ -3,6 +3,8 @@ package path
 import (
 	"bytes"
 	"fmt"
+
+	"github.com/fatih/color"
 )
 
 type Coordinate struct {
@@ -19,6 +21,17 @@ func NewCoord(x int, y int) *Coordinate {
 		X: x,
 		Y: y,
 	}
+}
+
+type weightedCoord struct {
+	coord  *Coordinate
+	weight int
+}
+
+func weightedCoordComparer(a interface{}, b interface{}) int {
+	ac := a.(*weightedCoord)
+	bc := b.(*weightedCoord)
+	return bc.weight - ac.weight
 }
 
 type Path []*Coordinate
@@ -85,15 +98,18 @@ func NewMap(size int, obstacles ...*Obstacle) *Map {
 }
 
 func (m *Map) Draw() {
+	blocked := color.New(color.FgBlue)
+	pathPoint := color.New(color.FgRed)
+
 	for i := 0; i < m.size; i++ {
 		for j := 0; j < m.size; j++ {
 			switch m.cells[i][j] {
 			case Free:
 				fmt.Printf(". ")
 			case Blocked:
-				fmt.Printf("# ")
+				blocked.Printf("# ")
 			case PathPoint:
-				fmt.Printf("* ")
+				pathPoint.Printf("* ")
 			}
 		}
 		fmt.Print("\n")
