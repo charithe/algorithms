@@ -17,6 +17,8 @@ Data Structures
 Algorithms
 ----------
 
-- Breadth-first path finding
-- Greedy breadth-first path finding
-- Djikstra's path finding
+- Path finding
+    - Breadth-first
+    - Greedy breadth-first
+    - Djikstra
+    - A*

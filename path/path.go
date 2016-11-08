@@ -7,6 +7,8 @@ import (
 	"github.com/fatih/color"
 )
 
+type PathFinder func(*Map, *Coordinate, *Coordinate) Path
+
 type Coordinate struct {
 	X int
 	Y int
