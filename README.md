@@ -10,7 +10,7 @@ Data Structures
 ---------------
 
 - Circular queue
-- Binary tree
+- Binary tree (with Day-Stout-West balancing algorithm)
 - Binary heap
 
 
